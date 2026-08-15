@@ -1,9 +1,20 @@
 import streamlit as st
 import pandas as pd
 import pickle
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
+from sklearn.metrics import (
+    accuracy_score, 
+    roc_auc_score, 
+    precision_score, 
+    recall_score, 
+    f1_score, 
+    matthews_corrcoef, 
+    confusion_matrix, 
+    classification_report
+)
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+st.set_page_config(page_title="Heart Disease Prediction", layout="wide")
 
 st.title("Heart Disease Prediction & Model Evaluation")
 st.write("Upload your test data to evaluate the performance of different Machine Learning models.")
@@ -47,18 +58,30 @@ if uploaded_file is not None:
             st.error(f"Error: Model file '{model_filename}' not found.")
             st.stop()
             
-        # Make Predictions
+        # Make Predictions and Probability Estimates
         y_pred = model.predict(X_test_scaled)
+        y_prob = model.predict_proba(X_test_scaled)[:, 1]
         
-        # 3. Display of evaluation metrics
+        # Calculate all 6 required metrics
+        acc = accuracy_score(y_test, y_pred)
+        auc = roc_auc_score(y_test, y_prob)
+        prec = precision_score(y_test, y_pred)
+        rec = recall_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
+        mcc = matthews_corrcoef(y_test, y_pred)
+        
+        # 3. Display all 6 evaluation metrics
         st.write(f"### Evaluation Metrics for {model_name}")
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Accuracy", f"{accuracy_score(y_test, y_pred):.4f}")
-        col2.metric("Precision", f"{precision_score(y_test, y_pred):.4f}")
-        col3.metric("Recall", f"{recall_score(y_test, y_pred):.4f}")
-        col4.metric("F1 Score", f"{f1_score(y_test, y_pred):.4f}")
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
+        col1.metric("Accuracy", f"{acc:.4f}")
+        col2.metric("AUC Score", f"{auc:.4f}")
+        col3.metric("Precision", f"{prec:.4f}")
+        col4.metric("Recall", f"{rec:.4f}")
+        col5.metric("F1 Score", f"{f1:.4f}")
+        col6.metric("MCC Score", f"{mcc:.4f}")
         
         # 4. Confusion matrix and classification report
+        st.write("---")
         st.write("### Classification Report")
         st.text(classification_report(y_test, y_pred))
         
