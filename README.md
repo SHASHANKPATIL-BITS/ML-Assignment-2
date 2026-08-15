@@ -10,7 +10,7 @@ The objective of this project is to build and evaluate multiple machine learning
 - **Description:** The dataset contains clinical features such as age, sex, chest pain type, resting blood pressure, cholesterol, fasting blood sugar, and maximum heart rate achieved. The target variable is binary, indicating the presence (1) or absence (0) of heart disease.
 
 ### c. Github Repository Link
-[https://github.com/SHASHANKPATIL-BITS/ML-Assignment-2][cite: 1]
+[https://github.com/SHASHANKPATIL-BITS/ML-Assignment-2] [cite: 1]
 
 ### d. Models Used and Comparison Table[cite: 1]
 The following five classification models were trained and evaluated on the dataset: Logistic Regression, Decision Tree, k-Nearest Neighbors (kNN), Naive Bayes, and Random Forest. 
