@@ -12,7 +12,8 @@ The objective of this project is to build and evaluate multiple machine learning
 ### c. Github Repository Link
 (https://github.com/SHASHANKPATIL-BITS/ML-Assignment-2/tree/main)
 
-**Streamlit App Link**
+## Streamlit App Link
+
 (https://ml-assignment-2-dckbo3byqmhtcy2yzfsknr.streamlit.app/)
 
 ### d. Models Used and Comparison Table
