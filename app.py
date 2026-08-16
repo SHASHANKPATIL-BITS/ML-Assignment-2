@@ -88,10 +88,9 @@ if uploaded_file is not None:
         report_dict = classification_report(y_test, y_pred, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
         
-        # UI ENHANCEMENT 1: Capitalize and clean column names
+       
         report_df.columns = ["Precision", "Recall", "F1 Score", "Support"]
         
-        # UI ENHANCEMENT 2: Make row names (index) human-readable
         index_mapping = {
             '0': 'Class 0 (No Disease)',
             '1': 'Class 1 (Disease)',
@@ -101,16 +100,20 @@ if uploaded_file is not None:
         }
         report_df.rename(index=index_mapping, inplace=True)
         
-        # UI ENHANCEMENT 3 & 4: Format decimal places and center align
+        report_df.loc['Overall Accuracy', 'Support'] = report_df.loc['Macro Avg', 'Support']
+        
         styled_df = report_df.style.format({
             "Precision": "{:.4f}",
             "Recall": "{:.4f}",
             "F1 Score": "{:.4f}",
-            "Support": "{:.0f}"  # Whole numbers for patient counts!
-        }).set_properties(**{'text-align': 'center'})
+            "Support": "{:.0f}" 
+        }).set_properties(**{'text-align': 'center'}).set_table_styles([
+            {'selector': 'th', 'props': [('text-align', 'center')]},
+            {'selector': 'td', 'props': [('text-align', 'center')]}
+        ])
         
-        # Display the upgraded table stretched nicely across the container
-        st.dataframe(styled_df, use_container_width=True)
+        # Display as a static table to strictly enforce the center alignment
+        st.table(styled_df)
         
         st.write("### Confusion Matrix")
         cm = confusion_matrix(y_test, y_pred)
