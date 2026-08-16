@@ -32,8 +32,21 @@ if uploaded_file is not None:
     # Load the uploaded dataset
     test_data = pd.read_csv(uploaded_file)
     
+    # --- Data Preview Section ---
     st.write("### Data Preview")
-    st.dataframe(test_data.head())
+
+    # Format column names to be bold and center-aligned
+    preview_df = test_data.head().copy()
+
+    # Render using st.table to strictly enforce CSS alignment
+    styled_preview = preview_df.style.set_properties(**{
+        'text-align': 'center'
+    }).set_table_styles([
+        {'selector': 'th', 'props': [('text-align', 'center'), ('font-weight', 'bold')]},
+        {'selector': 'td', 'props': [('text-align', 'center')]}
+    ])
+
+    st.table(styled_preview)
     
     # Check if target column exists
     if 'target' in test_data.columns:
@@ -80,17 +93,18 @@ if uploaded_file is not None:
         col5.metric("F1 Score", f"{f1:.4f}")
         col6.metric("MCC Score", f"{mcc:.4f}")
         
-        # 4. Confusion matrix and classification report
+        # --- Classification Report Section ---
         st.write("---")
         st.write("### Classification Report")
-        
-        # Convert report to dictionary, then to a DataFrame
+
+        # Convert report to a clean DataFrame
         report_dict = classification_report(y_test, y_pred, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
-        
-       
+
+        # Rename columns
         report_df.columns = ["Precision", "Recall", "F1 Score", "Support"]
-        
+
+        # Rename rows
         index_mapping = {
             '0': 'Class 0 (No Disease)',
             '1': 'Class 1 (Disease)',
@@ -99,21 +113,24 @@ if uploaded_file is not None:
             'weighted avg': 'Weighted Avg'
         }
         report_df.rename(index=index_mapping, inplace=True)
-        
+
+        # Fix accuracy support artifact
         report_df.loc['Overall Accuracy', 'Support'] = report_df.loc['Macro Avg', 'Support']
-        
-        styled_df = report_df.style.format({
+
+        # Style: Left-align index (first column), Center-align headers & metric values
+        styled_report = report_df.style.format({
             "Precision": "{:.4f}",
             "Recall": "{:.4f}",
             "F1 Score": "{:.4f}",
-            "Support": "{:.0f}" 
-        }).set_properties(**{'text-align': 'center'}).set_table_styles([
-            {'selector': 'th', 'props': [('text-align', 'center')]},
+            "Support": "{:.0f}"
+        }).set_table_styles([
+            {'selector': 'th.col_heading', 'props': [('text-align', 'center'), ('font-weight', 'bold')]},
+            {'selector': 'th.row_heading', 'props': [('text-align', 'left')]},
             {'selector': 'td', 'props': [('text-align', 'center')]}
         ])
-        
-        # Display as a static table to strictly enforce the center alignment
-        st.table(styled_df)
+
+        # Render as static table to preserve CSS rules
+        st.table(styled_report)
         
         st.write("### Confusion Matrix")
         cm = confusion_matrix(y_test, y_pred)
