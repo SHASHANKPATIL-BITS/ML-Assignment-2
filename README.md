@@ -5,14 +5,14 @@ The objective of this project is to build and evaluate multiple machine learning
 
 ### b. Dataset Description
 - **Source:** Kaggle (Heart Disease Dataset)
-- **Minimum Instance Size:** 1025 rows[cite: 1]
-- **Minimum Feature Size:** 13 features + 1 target column (14 total)[cite: 1]
+- **Minimum Instance Size:** 1025 rows
+- **Minimum Feature Size:** 13 features + 1 target column (14 total)
 - **Description:** The dataset contains clinical features such as age, sex, chest pain type, resting blood pressure, cholesterol, fasting blood sugar, and maximum heart rate achieved. The target variable is binary, indicating the presence (1) or absence (0) of heart disease.
 
 ### c. Github Repository Link
-[https://github.com/SHASHANKPATIL-BITS/ML-Assignment-2] [cite: 1]
+(https://github.com/SHASHANKPATIL-BITS/ML-Assignment-2/tree/main)
 
-### d. Models Used and Comparison Table[cite: 1]
+### d. Models Used and Comparison Table
 The following five classification models were trained and evaluated on the dataset: Logistic Regression, Decision Tree, k-Nearest Neighbors (kNN), Naive Bayes, and Random Forest. 
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
@@ -23,7 +23,7 @@ The following five classification models were trained and evaluated on the datas
 | Naive Bayes | 0.8000 | 0.8706 | 0.7541 | 0.8932 | 0.8178 | 0.6102 |
 | Random Forest (Ensemble)| 0.9854 | 1.0000 | 1.0000 | 0.9709 | 0.9852 | 0.9712 |
 
-### Observations on Model Performance[cite: 1]
+### Observations on Model Performance
 
 | ML Model Name | Observation about model performance |
 | :--- | :--- |
