@@ -81,9 +81,16 @@ if uploaded_file is not None:
         col6.metric("MCC Score", f"{mcc:.4f}")
         
         # 4. Confusion matrix and classification report
+        # 4. Confusion matrix and classification report
         st.write("---")
         st.write("### Classification Report")
-        st.text(classification_report(y_test, y_pred))
+        
+        # Convert report to dictionary, then to a DataFrame
+        report_dict = classification_report(y_test, y_pred, output_dict=True)
+        report_df = pd.DataFrame(report_dict).transpose()
+        
+        # Display as a styled, interactive Streamlit dataframe
+        st.dataframe(report_df.style.format("{:.4f}"))
         
         st.write("### Confusion Matrix")
         cm = confusion_matrix(y_test, y_pred)
