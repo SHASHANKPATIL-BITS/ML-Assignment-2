@@ -58,11 +58,11 @@ if uploaded_file is not None:
             st.error(f"Error: Model file '{model_filename}' not found.")
             st.stop()
             
-        # Make Predictions and Probability Estimates
+        # Makes Predictions and Probability Estimates
         y_pred = model.predict(X_test_scaled)
         y_prob = model.predict_proba(X_test_scaled)[:, 1]
         
-        # Calculate all 6 required metrics
+        # Calculates all 6 required metrics
         acc = accuracy_score(y_test, y_pred)
         auc = roc_auc_score(y_test, y_prob)
         prec = precision_score(y_test, y_pred)
@@ -70,7 +70,7 @@ if uploaded_file is not None:
         f1 = f1_score(y_test, y_pred)
         mcc = matthews_corrcoef(y_test, y_pred)
         
-        # 3. Display all 6 evaluation metrics
+        # 3. Displays all 6 evaluation metrics
         st.write(f"### Evaluation Metrics for {model_name}")
         col1, col2, col3, col4, col5, col6 = st.columns(6)
         col1.metric("Accuracy", f"{acc:.4f}")
@@ -81,7 +81,6 @@ if uploaded_file is not None:
         col6.metric("MCC Score", f"{mcc:.4f}")
         
         # 4. Confusion matrix and classification report
-        # 4. Confusion matrix and classification report
         st.write("---")
         st.write("### Classification Report")
         
@@ -89,8 +88,29 @@ if uploaded_file is not None:
         report_dict = classification_report(y_test, y_pred, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
         
-        # Display as a styled, interactive Streamlit dataframe
-        st.dataframe(report_df.style.format("{:.4f}"))
+        # UI ENHANCEMENT 1: Capitalize and clean column names
+        report_df.columns = ["Precision", "Recall", "F1 Score", "Support"]
+        
+        # UI ENHANCEMENT 2: Make row names (index) human-readable
+        index_mapping = {
+            '0': 'Class 0 (No Disease)',
+            '1': 'Class 1 (Disease)',
+            'accuracy': 'Overall Accuracy',
+            'macro avg': 'Macro Avg',
+            'weighted avg': 'Weighted Avg'
+        }
+        report_df.rename(index=index_mapping, inplace=True)
+        
+        # UI ENHANCEMENT 3 & 4: Format decimal places and center align
+        styled_df = report_df.style.format({
+            "Precision": "{:.4f}",
+            "Recall": "{:.4f}",
+            "F1 Score": "{:.4f}",
+            "Support": "{:.0f}"  # Whole numbers for patient counts!
+        }).set_properties(**{'text-align': 'center'})
+        
+        # Display the upgraded table stretched nicely across the container
+        st.dataframe(styled_df, use_container_width=True)
         
         st.write("### Confusion Matrix")
         cm = confusion_matrix(y_test, y_pred)
